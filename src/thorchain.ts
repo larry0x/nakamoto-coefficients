@@ -1,5 +1,5 @@
 import axios from "axios";
-import { formatInteger, parseBigInt } from "./helpers";
+import { findCoeff, formatInteger, parseBigInt } from "./helpers";
 import { Chain } from "./chains";
 
 interface Node {
@@ -7,7 +7,7 @@ interface Node {
   bond: string;
 }
 
-const thorchain = new Chain("thorchain", "thorchain", 1 / 3);
+const thorchain = new Chain("thorchain", "RUNE", 1 / 3);
 
 thorchain["compute"] = async () => {
   // RUNE price
@@ -32,27 +32,8 @@ thorchain["compute"] = async () => {
     return parseBigInt(node.bond, 8); // RUNE has 8 decimal places
   });
 
-  // sort bond amounts descendingly
-  bonds.sort((a, b) => {
-    if (a > b) {
-      return -1;
-    } else {
-      return 1;
-    }
-  });
-
-  // find Nakamoto coefficient
-  let totalBond = bonds.reduce((a, b) => a + b, 0);
-  let cummBond = 0;
-  let coeff = 0;
-  for (let i = 0; i < bonds.length; i++) {
-    cummBond += bonds[i];
-    // thorchain can be halted by 33%+1 nodes
-    if (cummBond > totalBond / 3) {
-      coeff = i + 1;
-      break;
-    }
-  }
+  // thorchain can be halted by 33%+1 validators
+  const { totalBond, cummBond, coeff } = findCoeff(bonds, 1 / 3);
 
   const bribe = cummBond * price;
 
@@ -63,8 +44,9 @@ thorchain["compute"] = async () => {
   return { totalBond, coeff, bribe };
 };
 
-export default thorchain;
-
+// test
 if (require.main === module) {
   thorchain.compute();
 }
+
+export default thorchain;

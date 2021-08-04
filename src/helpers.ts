@@ -14,6 +14,32 @@ export function formatInteger(int: number) {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export function findCoeff(bonds: number[], threshold: number) {
+  // sort bond amounts descendingly
+  bonds.sort((a, b) => {
+    if (a > b) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+
+  // find Nakamoto coefficient
+  let totalBond = bonds.reduce((a, b) => a + b, 0);
+  let cummBond = 0;
+  let coeff = 0;
+  for (let i = 0; i < bonds.length; i++) {
+    cummBond += bonds[i];
+    // thorchteain can be halted by 33%+1 nodes
+    if (cummBond > totalBond * threshold) {
+      coeff = i + 1;
+      break;
+    }
+  }
+
+  return { totalBond, cummBond, coeff };
+}
+
 // test
 if (require.main === module) {
   // should be 123.456789
