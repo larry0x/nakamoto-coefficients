@@ -3,7 +3,7 @@
   "author": "larry_0x <https://twitter.com/larry0x>",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --public-url ./",
     "start": "parcel serve index.html"
   },
   "dependencies": {
