@@ -3,35 +3,35 @@ import { findCoeff, formatInteger, formatMoney, parseBigInt } from "./helpers";
 import { Chain } from "./chains";
 
 interface Validator {
-  tokens: string;
+  voting_power: string;
 }
 
-const terra = new Chain("terra", "terra-luna", "LUNA", 1 / 3);
+const cosmos = new Chain("cosmos", "cosmos", "ATOM", 1 / 3);
 
-terra["compute"] = async () => {
+cosmos["compute"] = async function () {
   // LUNA price
   const price = (
     await axios.get(
-      "https://api.coingecko.com/api/v3/simple/price?ids=terra-luna&vs_currencies=usd"
+      `https://api.coingecko.com/api/v3/simple/price?ids=${this.coingeckoId}&vs_currencies=usd`
     )
-  ).data["terra-luna"].usd;
+  ).data["cosmos"].usd;
 
   // list of validators
   const validators: Validator[] = (
-    await axios.get("https://lcd.terra.dev/staking/validators")
-  ).data.result;
+    await axios.get("https://cosmos.sg-1.online/validatorsets/latest")
+  ).data.result.validators;
 
   // the bonded amount of each validator
   const bonds = validators.map((validator) => {
-    return parseBigInt(validator.tokens, 6); // LUNA has 6 decimal places
+    return parseBigInt(validator.voting_power, 0); // 1 voting power = 1 ATOM
   });
 
-  // terra can be halted by 33%+1 validators
+  // cosmos can be halted by 33%+1 validators
   const { totalBond, cummBond, coeff } = findCoeff(bonds, 1 / 3);
 
   const bribe = cummBond * price;
 
-  console.log(`totalBond = ${formatInteger(totalBond)} LUNA`);
+  console.log(`totalBond = ${formatInteger(totalBond)} ${this.symbol}`);
   console.log(`coeff = ${coeff}`);
   console.log(`bribe = ${formatMoney(bribe, 0)}`);
   console.log(`price = ${formatMoney(price, 2)}`);
@@ -41,7 +41,7 @@ terra["compute"] = async () => {
 
 // test
 if (require.main === module) {
-  terra.compute();
+  cosmos.compute();
 }
 
-export default terra;
+export default cosmos;

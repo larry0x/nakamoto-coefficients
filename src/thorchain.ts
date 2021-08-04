@@ -1,5 +1,5 @@
 import axios from "axios";
-import { findCoeff, formatInteger, parseBigInt } from "./helpers";
+import { findCoeff, formatInteger, formatMoney, parseBigInt } from "./helpers";
 import { Chain } from "./chains";
 
 interface Node {
@@ -7,7 +7,7 @@ interface Node {
   bond: string;
 }
 
-const thorchain = new Chain("thorchain", "RUNE", 1 / 3);
+const thorchain = new Chain("thorchain", "thorchain", "RUNE", 1 / 3);
 
 thorchain["compute"] = async () => {
   // RUNE price
@@ -39,9 +39,10 @@ thorchain["compute"] = async () => {
 
   console.log(`totalBond = ${formatInteger(totalBond)} RUNE`);
   console.log(`coeff = ${coeff}`);
-  console.log(`bribe = $${formatInteger(bribe)}`);
+  console.log(`bribe = ${formatMoney(bribe, 0)}`);
+  console.log(`price = ${formatMoney(price, 2)}`);
 
-  return { totalBond, coeff, bribe };
+  return { totalBond, coeff, bribe, price };
 };
 
 // test

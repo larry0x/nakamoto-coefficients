@@ -14,6 +14,13 @@ export function formatInteger(int: number) {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export function formatMoney(amount: number, decPlaces = 2) {
+  const dec = amount % 1;
+  return (
+    "$" + formatInteger(amount) + (decPlaces > 0 ? dec.toFixed(decPlaces).slice(1) : "")
+  );
+}
+
 export function findCoeff(bonds: number[], threshold: number) {
   // sort bond amounts descendingly
   bonds.sort((a, b) => {
