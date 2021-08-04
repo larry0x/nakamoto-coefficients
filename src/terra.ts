@@ -8,13 +8,13 @@ interface Validator {
 
 const terra = new Chain("terra", "terra-luna", "LUNA", 1 / 3);
 
-terra["compute"] = async () => {
+terra["compute"] = async function () {
   // LUNA price
   const price = (
     await axios.get(
       "https://api.coingecko.com/api/v3/simple/price?ids=terra-luna&vs_currencies=usd"
     )
-  ).data["terra-luna"].usd;
+  ).data[this.coingeckoId].usd;
 
   // list of validators
   const validators: Validator[] = (

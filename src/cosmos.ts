@@ -14,7 +14,7 @@ cosmos["compute"] = async function () {
     await axios.get(
       `https://api.coingecko.com/api/v3/simple/price?ids=${this.coingeckoId}&vs_currencies=usd`
     )
-  ).data["cosmos"].usd;
+  ).data[this.coingeckoId].usd;
 
   // list of validators
   const validators: Validator[] = (

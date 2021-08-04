@@ -9,13 +9,13 @@ interface Node {
 
 const thorchain = new Chain("thorchain", "thorchain", "RUNE", 1 / 3);
 
-thorchain["compute"] = async () => {
+thorchain["compute"] = async function () {
   // RUNE price
   const price = (
     await axios.get(
       "https://api.coingecko.com/api/v3/simple/price?ids=thorchain&vs_currencies=usd"
     )
-  ).data.thorchain.usd;
+  ).data[this.coingeckoId].usd;
 
   // list of nodes
   const nodes: Node[] = (
