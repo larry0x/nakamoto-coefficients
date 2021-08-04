@@ -1,12 +1,12 @@
 import axios from "axios";
 import { findCoeff, formatInteger, formatMoney, parseBigInt } from "./helpers";
-import { Chain } from "./chains";
+import { Chain } from "./chain";
 
 interface Validator {
   voting_power: string;
 }
 
-const cosmos = new Chain("cosmos", "cosmos", "ATOM", 1 / 3);
+const cosmos = new Chain("cosmoshub", "cosmos", "ATOM", 1 / 3);
 
 cosmos["compute"] = async function () {
   // LUNA price
@@ -31,17 +31,21 @@ cosmos["compute"] = async function () {
 
   const bribe = cummBond * price;
 
+  console.log(this.name);
   console.log(`totalBond = ${formatInteger(totalBond)} ${this.symbol}`);
   console.log(`coeff = ${coeff}`);
   console.log(`bribe = ${formatMoney(bribe, 0)}`);
   console.log(`price = ${formatMoney(price, 2)}`);
 
-  return { totalBond, coeff, bribe, price };
+  return {
+    name: this.name,
+    symbol: this.symbol,
+    threshold: this.threshold,
+    price,
+    totalBond,
+    coeff,
+    bribe,
+  };
 };
-
-// test
-if (require.main === module) {
-  cosmos.compute();
-}
 
 export default cosmos;

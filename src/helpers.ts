@@ -21,6 +21,10 @@ export function formatMoney(amount: number, decPlaces = 2) {
   );
 }
 
+export function formatPercentage(percent: number, decPlaces = 0) {
+  return (percent * 100).toFixed(decPlaces) + "%";
+}
+
 export function findCoeff(bonds: number[], threshold: number) {
   // sort bond amounts descendingly
   bonds.sort((a, b) => {

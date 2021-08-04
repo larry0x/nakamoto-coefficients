@@ -14,9 +14,12 @@ export class Chain {
 
 export interface Chain {
   compute(): Promise<{
+    name: string;
+    symbol: string;
+    price: number;
     totalBond: number;
+    threshold: number;
     coeff: number;
     bribe: number;
-    price: number;
   }>;
 }

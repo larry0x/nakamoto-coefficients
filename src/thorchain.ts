@@ -1,6 +1,6 @@
 import axios from "axios";
 import { findCoeff, formatInteger, formatMoney, parseBigInt } from "./helpers";
-import { Chain } from "./chains";
+import { Chain } from "./chain";
 
 interface Node {
   status: "Active" | "Standby" | "Whitelisted";
@@ -37,17 +37,21 @@ thorchain["compute"] = async function () {
 
   const bribe = cummBond * price;
 
-  console.log(`totalBond = ${formatInteger(totalBond)} RUNE`);
+  console.log(this.name);
+  console.log(`totalBond = ${formatInteger(totalBond)} ${this.symbol}`);
   console.log(`coeff = ${coeff}`);
   console.log(`bribe = ${formatMoney(bribe, 0)}`);
   console.log(`price = ${formatMoney(price, 2)}`);
 
-  return { totalBond, coeff, bribe, price };
+  return {
+    name: this.name,
+    symbol: this.symbol,
+    threshold: this.threshold,
+    price,
+    totalBond,
+    coeff,
+    bribe,
+  };
 };
-
-// test
-if (require.main === module) {
-  thorchain.compute();
-}
 
 export default thorchain;
