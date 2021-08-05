@@ -3,8 +3,8 @@
   "author": "larry_0x <https://twitter.com/larry0x>",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "parcel build index.html --public-url ./",
-    "start": "parcel serve index.html"
+    "build": "rm -rfv dist && parcel build index.html --public-url ./",
+    "serve": "parcel serve index.html"
   },
   "dependencies": {
     "axios": "^0.21.1",

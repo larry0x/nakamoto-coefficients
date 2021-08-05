@@ -1,9 +1,10 @@
 import cosmos from "./cosmos";
+import solana from "./solana";
 import terra from "./terra";
 import thorchain from "./thorchain";
 import { formatInteger, formatMoney, formatPercentage } from "./helpers";
 
-const chains = [cosmos, terra, thorchain];
+const chains = [cosmos, solana, terra, thorchain];
 const promises = chains.map((chain) => chain.compute());
 
 async function run() {
